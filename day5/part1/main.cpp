@@ -1,6 +1,7 @@
 #include <cctype>
 #include <iostream>
 #include <map>
+#include <sstream>
 #include <utility>
 #include <vector>
 
@@ -10,7 +11,7 @@ int main() {
   auto data = get_input();
 
   std::map<int, int> grid;
-  for (size_t i = 0; i < 100; ++i) {
+  for (size_t i = 0; i < 1000; ++i) {
     grid[i] = 0;
   }
 
@@ -20,13 +21,13 @@ int main() {
       int start = std::min(nd, th);
       int end = std::max(nd, th);
       while (start <= end) {
-        ++grid[st + start * 10];
+        ++grid[st + start * 1000];
         ++start;
       }
     }
     if (nd == th) {
-      int start = std::min(st, rd) + 10 * nd;
-      int end = std::max(st, rd) + 10 * nd;
+      int start = std::min(st, rd) + 1000 * nd;
+      int end = std::max(st, rd) + 1000 * nd;
       while (start <= end) {
         ++grid[start];
         ++start;
@@ -37,8 +38,6 @@ int main() {
   int answer = 0;
   for (const auto &[key, value] : grid) {
     if (value >= 2) ++answer;
-    if (key > 0 && key % 10 == 0) std::cout << '\n';
-    std::cout << ' ' << value << ' ';
   }
 
   std::cout << "\nanswer: " << answer << '\n';
@@ -51,8 +50,21 @@ std::vector<int> get_input() {
     std::string data;
     std::getline(std::cin, data);
     if (data == "997") break;
+    std::string number_str;
     for (size_t i = 0; i < data.size(); ++i) {
-      if (std::isdigit(data[i])) lines.push_back(data[i] - 48);
+      if (std::isdigit(data[i])) number_str.push_back(data[i]);
+      if (data[i] == ',') {
+        lines.push_back(std::stoi(number_str));
+        number_str = "";
+      }
+      if (data[i] == ' ' && data[i - 1] == '>') {
+        lines.push_back(std::stoi(number_str));
+        number_str = "";
+      }
+      if (i == data.size() - 1) {
+        lines.push_back(std::stoi(number_str));
+        number_str = "";
+      }
     }
   }
 
