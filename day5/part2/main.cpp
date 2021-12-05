@@ -27,30 +27,37 @@ int main() {
     int end_x = std::max(st, rd);
     if (st == rd) {
       while (start_y <= end_y) {
-        ++grid[st + start_y * 10];
+        ++grid[st + start_y * 1000];
         ++start_y;
       }
     }
     if (nd == th) {
       while (start_x <= end_x) {
-        ++grid[start_x + 10 * nd];
+        ++grid[start_x + 1000 * nd];
         ++start_x;
       }
     }
-    if ((end_y - start_y) == (end_x - start_x)) {
+    if (abs(st - rd) == abs(nd - th)) {
       bool st_greater = st > rd;
       bool nd_greater = nd > th;
-      while (st != rd) {
-        ++grid[st + nd * 10];
-        if (st_greater)
+      if (st_greater) {
+        while (st >= rd) {
+          ++grid[st + nd * 1000];
           --st;
-        else
+          if (nd_greater)
+            --nd;
+          else
+            ++nd;
+        }
+      } else {
+        while (st <= rd) {
+          ++grid[st + nd * 1000];
           ++st;
-
-        if (nd_greater)
-          --nd;
-        else
-          ++nd;
+          if (nd_greater)
+            --nd;
+          else
+            ++nd;
+        }
       }
     }
   }
@@ -58,6 +65,8 @@ int main() {
   int answer = 0;
   for (const auto &[key, value] : grid) {
     if (value >= 2) ++answer;
+    if (key % 10 == 0) std::cout << '\n';
+    std::cout << value << ' ';
   }
 
   std::cout << "\nanswer: " << answer << '\n';
