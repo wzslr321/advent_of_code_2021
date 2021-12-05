@@ -5,7 +5,14 @@
 #include <utility>
 #include <vector>
 
-std::vector<int> get_input();
+struct cords {
+  int x1;
+  int x2;
+  int y1;
+  int y2;
+};
+
+std::vector<cords> get_input();
 
 int main() {
   auto data = get_input();
@@ -15,8 +22,8 @@ int main() {
     grid[i] = 0;
   }
 
-  for (size_t i = 0; i < data.size() - 5; i += 4) {
-    int st = data[i], nd = data[i + 1], rd = data[i + 2], th = data[i + 3];
+  for (size_t i = 0; i < data.size(); ++i) {
+    int st = data[i].x1, nd = data[i].y1, rd = data[i].x2, th = data[i].y2;
     if (st == rd) {
       int start = std::min(nd, th);
       int end = std::max(nd, th);
@@ -44,28 +51,15 @@ int main() {
   return 0;
 }
 
-std::vector<int> get_input() {
-  std::vector<int> lines;
+std::vector<cords> get_input() {
+  std::vector<cords> lines;
   while (std::cin) {
-    std::string data;
-    std::getline(std::cin, data);
-    if (data == "997") break;
-    std::string number_str;
-    for (size_t i = 0; i < data.size(); ++i) {
-      if (std::isdigit(data[i])) number_str.push_back(data[i]);
-      if (data[i] == ',') {
-        lines.push_back(std::stoi(number_str));
-        number_str = "";
-      }
-      if (data[i] == ' ' && data[i - 1] == '>') {
-        lines.push_back(std::stoi(number_str));
-        number_str = "";
-      }
-      if (i == data.size() - 1) {
-        lines.push_back(std::stoi(number_str));
-        number_str = "";
-      }
-    }
+    cords c;
+    char tmp;
+    std::cin >> c.x1;
+    if (c.x1 == 997) break;
+    std::cin >> tmp >> c.y1 >> tmp >> tmp >> c.x2 >> tmp >> c.y2;
+    lines.push_back(c);
   }
 
   return lines;
