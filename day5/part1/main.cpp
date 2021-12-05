@@ -18,39 +18,26 @@ int main() {
   auto data = get_input();
 
   std::map<int, int> grid;
+  for (size_t i = 0; i < 1000; ++i) {
+    grid[i] = 0;
+  }
 
   for (size_t i = 0; i < data.size(); ++i) {
     int st = data[i].x1, nd = data[i].y1, rd = data[i].x2, th = data[i].y2;
-    int start_y = std::min(nd, th);
-    int end_y = std::max(nd, th);
-    int start_x = std::min(st, rd);
-    int end_x = std::max(st, rd);
     if (st == rd) {
-      while (start_y <= end_y) {
-        ++grid[st + start_y * 10];
-        ++start_y;
+      int start = std::min(nd, th);
+      int end = std::max(nd, th);
+      while (start <= end) {
+        ++grid[st + start * 1000];
+        ++start;
       }
     }
     if (nd == th) {
-      while (start_x <= end_x) {
-        ++grid[start_x + 10 * nd];
-        ++start_x;
-      }
-    }
-    if ((end_y - start_y) == (end_x - start_x)) {
-      bool st_greater = st > rd;
-      bool nd_greater = nd > th;
-      while (st != rd) {
-        ++grid[st + nd * 10];
-        if (st_greater)
-          --st;
-        else
-          ++st;
-
-        if (nd_greater)
-          --nd;
-        else
-          ++nd;
+      int start = std::min(st, rd) + 1000 * nd;
+      int end = std::max(st, rd) + 1000 * nd;
+      while (start <= end) {
+        ++grid[start];
+        ++start;
       }
     }
   }
